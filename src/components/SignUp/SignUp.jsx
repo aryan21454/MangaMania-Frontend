@@ -10,6 +10,7 @@ function SignUp() {
     const {name, value} = e.target; 
     setInputs({...inputs, [name]: value});  
   }
+  
   const submit = async (e)=>{
    try {
      e.preventDefault();

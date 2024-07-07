@@ -6,39 +6,42 @@ import { Backend } from '../../config/config.js';
 
 function UpdateManga({setIsUpdate,setArr ,arr , index}) {
     const [input, setInput] = useState(arr[index]);
+    const accessToken = localStorage.getItem('accessToken');
     const handleChange = (e)=>{
         const {name,value} = e.target;
         setInput({
             ...input,
             [name]: value
           });
-        //   console.log(name,value);
         };
         
     const handleUpdate = async () =>{
     try {
         
-        await axios.put(`${Backend}/api/v1/mangas/updateManga/${input._id}`, input ).then((res)=>console.log(res));
+        await axios.put(`${Backend}/api/v1/mangas/updateManga/${input._id}`, {...input,accessToken} ).then((res)=>console.log(res));
+        try {
+                const fetchData = async () => {
+                 const res =  await axios.post(`${Backend}/api/v1/mangas/getMangaList`
+                  ,{accessToken}
+                 );
+                  setArr(res.data.data);
+                }
+                fetchData();
+               } catch (error) {
+                console.log(error);
+                
+          }
          setIsUpdate(false);
          console.log(arr);
     } catch (error) {
       console.log(error);
     }
     }
-    useEffect(() => {
+    // useEffect(() => {
       
-         try {
-          const fetchData = async () => {
-           const res =  await axios.get(`${Backend}/api/v1/mangas/getMangaList`);
-            setArr(res.data.data);
-          }
-          fetchData();
-         } catch (error) {
-          console.log(error);
-          
-         }
+  
        
-     }, [handleUpdate]);
+    //  }, [handleUpdate]);
     
   return (
     <div className="modal-container flex justify-center items-center">

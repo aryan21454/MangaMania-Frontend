@@ -22,14 +22,20 @@ function SignIn() {
     e.preventDefault();
     // console.log(inputs);
    const response =  await axios.post(`${Backend}/api/v1/users/login`, inputs)
-   console.log(response);
+   
   
   if (response.data.message === "User logged in successfully")
     {
-      dispatch(authActions.login(response.data.data));
+      console.log(response.data.data);
+      const {user,accessToken ,refreshToken} = response.data.data;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      dispatch(authActions.login(user));
       navigate('/mangalist');
     }
-
+  else {
+    alert("wrong username");
+  }
    } catch (error) {
     console.log(error);
    }
@@ -44,7 +50,6 @@ function SignIn() {
             <span className='font-semibold'>Email</span>
             <input type="email" placeholder='Enter Your email' name='email' onChange={handleChange} value={inputs.email}  className="border border-gray-300 focus:border-blue-500 rounded-md px-4 py-2"/>
             </div>
-            
             <div className='flex flex-col'>
             <span className='font-semibold'>Password</span>
             <input type="password" placeholder='Create Password' name='password'  onChange={handleChange}  value={inputs.password} className="border border-gray-300 focus:border-blue-500 rounded-md px-4 py-2"/>

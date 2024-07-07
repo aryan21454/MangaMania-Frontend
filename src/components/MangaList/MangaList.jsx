@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import './MangaList.css'
 import CreateManga from './Modals/CreateManga';
 import { MdDelete } from "react-icons/md";
@@ -14,29 +14,27 @@ function MangaList() {
     const [isAdd, setIsAdd] = useState(false);
     const [isUpdate , setIsUpdate ] = useState(false);
     const [currIndex , setcurrIndex ] = useState(0);
+    axios.defaults.withCredentials = true;
     
-    
-    
-    const handleDelete = async(id) =>{
+const accessToken = localStorage.getItem('accessToken');
+    const handleDelete = useCallback(
+      async(id) =>{
      
         try{
-          await axios.delete(`${Backend}/api/v1/mangas/deleteManga/${id}`,{data:{id:id},}).then((res)=>console.log(res));
+          await axios.delete(`${Backend}/api/v1/mangas/deleteManga/${id}`,{data:{id:id, accessToken},}).then((res)=>console.log(res));
         }
         catch(err)
         {
           console.error(err);
         }
-
-        
-        
-    // setArr([...arr]);
     }
+    ,[])
     useEffect(() => {
    
       
        try {
          const fetchData = async () => {
-         const res=   await axios.get(`${Backend}/api/v1/mangas/getMangaList`);
+         const res= await axios.post(`${Backend}/api/v1/mangas/getMangaList`,{accessToken});
          setArr(res.data.data);  
        }
        fetchData();
