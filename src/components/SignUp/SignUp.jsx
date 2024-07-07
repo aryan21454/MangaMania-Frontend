@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './SignUp.css'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-
+import { Backend } from '../config/config.js';
 function SignUp() {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({email: "", username: "", password: ""});
@@ -11,20 +11,25 @@ function SignUp() {
     setInputs({...inputs, [name]: value});  
   }
   const submit = async (e)=>{
-    e.preventDefault();
-    await axios.post('http://localhost:8000/api/v1/users/register', inputs).then((response)=> {
-      if (response.data.message === "User created successfully")
-        {
-          alert(response.data.message);
-          setInputs({email: "", username: "", password: ""});
-          navigate('/signin');
-        }
-        else {
-          alert(response.data.message);
-        }
-      
+   try {
+     e.preventDefault();
+     await axios.post(`${Backend}/api/v1/users/register`, inputs).then((response)=> {
+       if (response.data.message === "User created successfully")
+         {
+           alert(response.data.message);
+           setInputs({email: "", username: "", password: ""});
+           navigate('/signin');
+         }
+         else {
+           alert(response.data.message);
+         }
+       
+     
+     }); 
+   } catch (error) {
+    console.log(error);
     
-    }); 
+   }
     
   
     

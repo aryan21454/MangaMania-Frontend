@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../store';
+import { Backend } from '../config/config.js';
 
 
 function SignIn() {
@@ -20,7 +21,7 @@ function SignIn() {
    try {
     e.preventDefault();
     // console.log(inputs);
-   const response =  await axios.post('http://localhost:8000/api/v1/users/login', inputs)
+   const response =  await axios.post(`${Backend}/api/v1/users/login`, inputs)
    console.log(response);
   
   if (response.data.message === "User logged in successfully")

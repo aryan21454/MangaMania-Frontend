@@ -1,6 +1,7 @@
 import React, {useEffect, useState } from 'react'
 import './CreateManga.css'
 import axios from 'axios';
+import { Backend } from '../../config/config.js';
 axios.defaults.withCredentials = true;
 function CreateManga({setIsAdd,setArr}) {
     const [input, setInput] = useState({ name: "", type: "", chapter: 0, linktoread: "" });
@@ -15,23 +16,32 @@ function CreateManga({setIsAdd,setArr}) {
         };
         
     const handleAdd = async() =>{
-      if (true){
-       const res=  await axios.post(`http://localhost:8000/api/v1/mangas/addManga`, input )
-       console.log(res);
-        setInput({ name: "", type: "", chapter: 0, linktoread: "" });
-      }
-      else 
-      {
-        setArr(prevArr => [...prevArr, input ] )
-        setInput({ name: "", type: "", chapter: 0, linktoread: "" });
+      try {
+        if (true){
+         const res=  await axios.post(`${Backend}/api/v1/mangas/addManga`, input )
+         console.log(res);
+          setInput({ name: "", type: "", chapter: 0, linktoread: "" });
+        }
+        else 
+        {
+          setArr(prevArr => [...prevArr, input ] )
+          setInput({ name: "", type: "", chapter: 0, linktoread: "" });
+        }
+      } catch (error) {
+        console.log(error);   
       }
     }
     useEffect(() => {
-      const fetchData = async () => {
-        const res = await axios.get(`http://localhost:8000/api/v1/mangas/getMangaList`,{ withCredentials: true });
-        setArr(res.data.data);
+      try {
+        const fetchData = async () => {
+          const res = await axios.get(`${Backend}/api/v1/mangas/getMangaList`,{ withCredentials: true });
+          setArr(res.data.data);
+        }
+        fetchData();
+      } catch (error) {
+        console.log(error);
+        
       }
-      fetchData();
     }, [handleAdd]);
     
 

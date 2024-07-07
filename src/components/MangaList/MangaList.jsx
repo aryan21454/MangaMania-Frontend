@@ -8,6 +8,7 @@ import { ImFilesEmpty } from "react-icons/im";
 import UpdateManga from './Modals/UpdateManga';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { Backend } from '../config/config.js';
 function MangaList() {
  const [arr , setArr] = useState([]);
     const [isAdd, setIsAdd] = useState(false);
@@ -19,7 +20,7 @@ function MangaList() {
     const handleDelete = async(id) =>{
      
         try{
-          await axios.delete(`http://localhost:8000/api/v1/mangas/deleteManga/${id}`,{data:{id:id},}).then((res)=>console.log(res));
+          await axios.delete(`${Backend}/api/v1/mangas/deleteManga/${id}`,{data:{id:id},}).then((res)=>console.log(res));
         }
         catch(err)
         {
@@ -35,7 +36,7 @@ function MangaList() {
       
        try {
          const fetchData = async () => {
-         const res=   await axios.get(`http://localhost:8000/api/v1/mangas/getMangaList`);
+         const res=   await axios.get(`${Backend}/api/v1/mangas/getMangaList`);
          setArr(res.data.data);  
        }
        fetchData();

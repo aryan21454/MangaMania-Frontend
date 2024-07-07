@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import './UpdateManga.css'
 import axios from 'axios';
 import { useEffect } from 'react';
+import { Backend } from '../../config/config.js';
+
 function UpdateManga({setIsUpdate,setArr ,arr , index}) {
     const [input, setInput] = useState(arr[index]);
     const handleChange = (e)=>{
@@ -14,18 +16,27 @@ function UpdateManga({setIsUpdate,setArr ,arr , index}) {
         };
         
     const handleUpdate = async () =>{
-      
-      await axios.put(`http://localhost:8000/api/v1/mangas/updateManga/${input._id}`, input ).then((res)=>console.log(res));
-       setIsUpdate(false);
-       console.log(arr);
+    try {
+        
+        await axios.put(`${Backend}/api/v1/mangas/updateManga/${input._id}`, input ).then((res)=>console.log(res));
+         setIsUpdate(false);
+         console.log(arr);
+    } catch (error) {
+      console.log(error);
+    }
     }
     useEffect(() => {
       
-         const fetchData = async () => {
-          const res =  await axios.get(`http://localhost:8000/api/v1/mangas/getMangaList`);
-           setArr(res.data.data);
+         try {
+          const fetchData = async () => {
+           const res =  await axios.get(`${Backend}/api/v1/mangas/getMangaList`);
+            setArr(res.data.data);
+          }
+          fetchData();
+         } catch (error) {
+          console.log(error);
+          
          }
-         fetchData();
        
      }, [handleUpdate]);
     
