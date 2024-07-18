@@ -1,1 +1,1 @@
-export const Backend=`http://localhost:8000`;
+export const Backend=`https://testmanga-37bo.onrender.com`;
