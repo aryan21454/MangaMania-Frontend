@@ -9,6 +9,9 @@ import UpdateManga from './Modals/UpdateManga';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { Backend } from '../config/config.js';
+
+axios.defaults.withCredentials = true;
+
 function MangaList() {
  const [arr , setArr] = useState([]);
     const [isAdd, setIsAdd] = useState(false);

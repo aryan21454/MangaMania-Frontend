@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { Backend } from '../../config/config.js';
 
+axios.defaults.withCredentials = true;
+
 function UpdateManga({setIsUpdate,setArr ,arr , index}) {
     const [input, setInput] = useState(arr[index]);
     const handleChange = (e)=>{
