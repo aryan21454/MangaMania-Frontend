@@ -5,10 +5,23 @@ import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png'
 import {useDispatch, useSelector} from 'react-redux';
 import { authActions } from '../../store';
+import axios from 'axios';
+import { Backend } from '../config/config.js';
+import toast from 'react-hot-toast';
+
 function Navbar() {
     const isLoggedin = useSelector((state)=>state.isLoggedin);
     const dispatch = useDispatch();
     const [isopen  , setisopen] = useState(false);
+    async function  handleLogout()
+    {
+      const response =  await axios.post(`${Backend}/api/v1/users/logout`); 
+      if (response.data.message === "User logged out successfully")
+      {
+        toast.success("User logged out successfully");
+      }
+      dispatch(authActions.logout())
+    }
   return (
     <div>
        <nav className="bg-gradient-to-r from-[rgb(95,15,64)] to-[rgb(49,14,104)] p-4 px-6">
@@ -56,8 +69,7 @@ function Navbar() {
           <Link to="/mangalist" className="text-white hover:text-gray-400">Manga List</Link>
           {isLoggedin && <>
 
-            <div onClick={()=>{
-              dispatch(authActions.logout())}}>
+            <div onClick={handleLogout}>
             <Link to="#" className="block text-white hover:text-gray-400 p-2">Logout</Link>
             </div>
           </>}

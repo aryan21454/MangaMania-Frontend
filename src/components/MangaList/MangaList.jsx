@@ -9,6 +9,7 @@ import UpdateManga from './Modals/UpdateManga';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { Backend } from '../config/config.js';
+import toast from 'react-hot-toast';
 
 axios.defaults.withCredentials = true;
 
@@ -23,16 +24,18 @@ function MangaList() {
     const handleDelete = async(id) =>{
      
         try{
-          await axios.delete(`${Backend}/api/v1/mangas/deleteManga/${id}`,{data:{id:id},}).then((res)=>console.log(res));
+        const res =   await axios.delete(`${Backend}/api/v1/mangas/deleteManga/${id}`,{data:{id:id},})
+        if (res.data.message === "Manga deleted successfully")
+        {
+          toast.success("Manga deleted successfully");
+        }
         }
         catch(err)
         {
           console.error(err);
         }
 
-        
-        
-    // setArr([...arr]);
+
     }
     useEffect(() => {
    

@@ -11,7 +11,7 @@ import { authActions } from './store';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuthStatus, refreshTokens } from './middleware/authMiddleware.js';
-
+import toast ,  {Toaster} from 'react-hot-toast';
 function App() {
   const dispatch = useDispatch();
   // useEffect(()=>{
@@ -23,6 +23,7 @@ function App() {
   const isLoggedin = useSelector(state=> state.isLoggedin);
   useEffect(() => {
     dispatch(checkAuthStatus());
+    // toast.success("hey bhai i am good");
 
     const interval = setInterval(() => {
       dispatch(refreshTokens());
@@ -36,6 +37,15 @@ console.log(isLoggedin)
   
   return (
     <div className="  w-full  min-h-screen" >
+      <Toaster position="top-right"
+      toastOptions={{
+        success:{
+          iconTheme:{
+            primary:'#531111'
+          }
+        }
+      }}
+      ></Toaster>
       <Router>
       <Navbar/>
         <Routes>

@@ -3,7 +3,7 @@ import './UpdateManga.css'
 import axios from 'axios';
 import { useEffect } from 'react';
 import { Backend } from '../../config/config.js';
-
+import toast from 'react-hot-toast';
 axios.defaults.withCredentials = true;
 
 function UpdateManga({setIsUpdate,setArr ,arr , index}) {
@@ -20,7 +20,11 @@ function UpdateManga({setIsUpdate,setArr ,arr , index}) {
     const handleUpdate = async () =>{
     try {
         
-        await axios.put(`${Backend}/api/v1/mangas/updateManga/${input._id}`, input ).then((res)=>console.log(res));
+      const res =   await axios.put(`${Backend}/api/v1/mangas/updateManga/${input._id}`, input );
+        if (res.data.message === "Manga updated successfully")
+        {
+          toast.success("Manga updated successfully")
+        }
          setIsUpdate(false);
          console.log(arr);
     } catch (error) {

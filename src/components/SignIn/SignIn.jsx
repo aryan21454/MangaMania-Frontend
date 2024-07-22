@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../store';
 import { Backend } from '../config/config.js';
+import toast from 'react-hot-toast';
 
 
 function SignIn() {
@@ -22,16 +23,28 @@ function SignIn() {
     e.preventDefault();
     // console.log(inputs);
    const response =  await axios.post(`${Backend}/api/v1/users/login`, inputs)
-   console.log(response);
-  
+  //  console.log(response);
+
   if (response.data.message === "User logged in successfully")
     {
       dispatch(authActions.login(response.data.data));
+      toast.success("Logged in successfully.")
       navigate('/mangalist');
     }
+   
+
+   
 
    } catch (error) {
-    console.log(error);
+    if (error.response.data.message === "Incorrect password")
+    {
+      toast.error("Password is incorrect.")
+    }
+    if (error.response.data.message === "User not found")
+    {
+      toast.error("User doesn't exist.")
+    }
+    console.log(error.response.data.message);
    }
   }
   return (

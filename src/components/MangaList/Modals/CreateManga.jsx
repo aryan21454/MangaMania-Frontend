@@ -2,6 +2,8 @@ import React, {useEffect, useState } from 'react'
 import './CreateManga.css'
 import axios from 'axios';
 import { Backend } from '../../config/config.js';
+import toast from 'react-hot-toast';
+
 axios.defaults.withCredentials = true;
 function CreateManga({setIsAdd,setArr}) {
     const [input, setInput] = useState({ name: "", type: "", chapter: 0, linktoread: "" });
@@ -18,15 +20,19 @@ function CreateManga({setIsAdd,setArr}) {
     const handleAdd = async() =>{
       try {
         if (true){
+          if (input.name.trim() ==="" || input.type.trim() ==="" || input.linktoread === "")
+          {
+            toast.error("Fill all fields.")
+            return;
+
+          }
          const res=  await axios.post(`${Backend}/api/v1/mangas/addManga`, input )
-         console.log(res);
+         if (res.data.message === "Manga added successfully")
+         {
+          toast.success("Manga added successfully.")
+         }
           setInput({ name: "", type: "", chapter: 0, linktoread: "" });
-        }
-        else 
-        {
-          setArr(prevArr => [...prevArr, input ] )
-          setInput({ name: "", type: "", chapter: 0, linktoread: "" });
-        }
+        } 
       } catch (error) {
         console.log(error);   
       }

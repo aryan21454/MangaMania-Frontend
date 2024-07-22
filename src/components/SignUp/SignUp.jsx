@@ -3,6 +3,8 @@ import './SignUp.css'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import { Backend } from '../config/config.js';
+import toast from 'react-hot-toast';
+
 function SignUp() {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({email: "", username: "", password: ""});
@@ -16,17 +18,19 @@ function SignUp() {
      await axios.post(`${Backend}/api/v1/users/register`, inputs).then((response)=> {
        if (response.data.message === "User created successfully")
          {
-           alert(response.data.message);
+          toast.success(response.data.message);
            setInputs({email: "", username: "", password: ""});
            navigate('/signin');
          }
-         else {
-           alert(response.data.message);
-         }
+         
        
      
      }); 
    } catch (error) {
+    if (error.response.data.message === "User already existed")
+      {
+       toast.error("User already exists.");
+      }
     console.log(error);
     
    }
